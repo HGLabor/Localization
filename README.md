@@ -1,6 +1,10 @@
 # Localization
  Localization API for HGLabor Network
  
+`graddle wrapper`
+
+` graddle publishToMavenLocal`
+ 
  You should create a **folder "lang"** containing json files
  
  Example: kitmessages_de.json
