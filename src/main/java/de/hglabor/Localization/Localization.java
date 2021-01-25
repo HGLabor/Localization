@@ -6,6 +6,7 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.io.File;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Locale;
@@ -16,13 +17,15 @@ public final class Localization {
 
     private final Map<Locale, Map<String, String>> translations;
     private final Gson gson;
+    private String colorReplaceValue;
 
     private Localization() {
         this.translations = new HashMap<>();
         this.gson = new Gson();
     }
 
-    public void loadLanguageFiles(Path folder) throws Exception {
+    public void loadLanguageFiles(Path folder,String colorReplaceValue) throws Exception {
+        this.colorReplaceValue = colorReplaceValue;
         File[] files = folder.toFile().listFiles();
 
         if (files == null) {
@@ -46,10 +49,10 @@ public final class Localization {
     }
 
     public String getMessage(String key, Locale locale) {
-        return translations.get(locale).getOrDefault(key, key).replace("&","§");
+        return translations.get(locale).getOrDefault(key, key).replaceAll("&",colorReplaceValue);
     }
 
     public String getMessage(String key, Map<String, String> values, Locale locale) {
-        return StrSubstitutor.replace(getMessage(key, locale), values).replace("&","§");
+        return StrSubstitutor.replace(getMessage(key, locale), values).replaceAll("&",colorReplaceValue);
     }
 }
