@@ -6,7 +6,6 @@ import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.io.File;
 import java.io.FileReader;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Locale;
@@ -24,7 +23,7 @@ public final class Localization {
         this.gson = new Gson();
     }
 
-    public void loadLanguageFiles(Path folder,String colorReplaceValue) throws Exception {
+    public void loadLanguageFiles(Path folder, String colorReplaceValue) throws Exception {
         this.colorReplaceValue = colorReplaceValue;
         File[] files = folder.toFile().listFiles();
 
@@ -42,7 +41,12 @@ public final class Localization {
                 Map<String, String> json = gson.fromJson(reader, Map.class);
 
                 if (json != null) {
-                    translations.put(Locale.forLanguageTag(name), json);
+                    Locale key = Locale.forLanguageTag(name);
+                    if (translations.containsKey(key)) {
+                        translations.get(key).putAll(json);
+                    } else {
+                        translations.put(key, json);
+                    }
                 }
             }
         }
@@ -50,13 +54,13 @@ public final class Localization {
 
     public String getMessage(String key, Locale locale) {
         if (translations.containsKey(locale)) {
-            return translations.get(locale).getOrDefault(key, key).replaceAll("&",colorReplaceValue);
+            return translations.get(locale).getOrDefault(key, key).replaceAll("&", colorReplaceValue);
         } else {
-            return translations.get(Locale.ENGLISH).getOrDefault(key, key).replaceAll("&",colorReplaceValue);
+            return translations.get(Locale.ENGLISH).getOrDefault(key, key).replaceAll("&", colorReplaceValue);
         }
     }
 
     public String getMessage(String key, Map<String, String> values, Locale locale) {
-        return StrSubstitutor.replace(getMessage(key, locale), values).replaceAll("&",colorReplaceValue);
+        return StrSubstitutor.replace(getMessage(key, locale), values).replaceAll("&", colorReplaceValue);
     }
 }
