@@ -46,10 +46,10 @@ public final class Localization {
     }
 
     public String getMessage(String key, Locale locale) {
-        return translations.get(locale).getOrDefault(key, key);
+        return translations.get(locale).getOrDefault(key, key).replace("&","§");
     }
 
     public String getMessage(String key, Map<String, String> values, Locale locale) {
-        return StrSubstitutor.replace(getMessage(key, locale), values);
+        return StrSubstitutor.replace(getMessage(key, locale), values).replace("&","§");
     }
 }
