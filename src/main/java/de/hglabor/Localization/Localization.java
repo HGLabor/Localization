@@ -2,20 +2,17 @@ package de.hglabor.Localization;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.io.File;
 import java.io.FileReader;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public final class Localization {
     public final static Localization INSTANCE = new Localization();
-    private static final Logger LOGGER = Logger.getLogger(Localization.class.getName());
 
     private final Map<Locale, Map<String, String>> translations;
     private final Gson gson;
@@ -23,15 +20,6 @@ public final class Localization {
     private Localization() {
         this.translations = new HashMap<>();
         this.gson = new Gson();
-    }
-
-    public static void main(String[] args) {
-        try {
-            INSTANCE.loadLanguageFiles(Paths.get("lang"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        System.out.println(INSTANCE.getMessage("kit",Locale.GERMAN));
     }
 
     public void loadLanguageFiles(Path folder) throws Exception {
@@ -56,8 +44,12 @@ public final class Localization {
             }
         }
     }
-    
+
     public String getMessage(String key, Locale locale) {
-        return translations.get(locale).getOrDefault(key,key);
+        return translations.get(locale).getOrDefault(key, key);
+    }
+
+    public String getMessage(String key, Map<String, String> values, Locale locale) {
+        return StrSubstitutor.replace(getMessage(key, locale), values);
     }
 }
