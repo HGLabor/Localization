@@ -49,7 +49,11 @@ public final class Localization {
     }
 
     public String getMessage(String key, Locale locale) {
-        return translations.get(locale).getOrDefault(key, key).replaceAll("&",colorReplaceValue);
+        if (translations.containsKey(locale)) {
+            return translations.get(locale).getOrDefault(key, key).replaceAll("&",colorReplaceValue);
+        } else {
+            return translations.get(Locale.ENGLISH).getOrDefault(key, key).replaceAll("&",colorReplaceValue);
+        }
     }
 
     public String getMessage(String key, Map<String, String> values, Locale locale) {
