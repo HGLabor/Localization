@@ -1,9 +1,9 @@
 # Localization
  Localization API for HGLabor Network
  
-`graddle wrapper`
+`gradle wrapper`
 
-` graddle publishToMavenLocal`
+` gradle publishToMavenLocal`
  
  You should create a **folder "lang"** containing json files
  
