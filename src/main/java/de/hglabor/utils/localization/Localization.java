@@ -1,4 +1,4 @@
-package de.hglabor.Localization;
+package de.hglabor.utils.localization;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
