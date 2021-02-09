@@ -1,16 +1,16 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 
 plugins {
-    id "com.jfrog.bintray" version "1.8.5"
+    id 'java'
+    id("maven-publish")
 }
 
-group = "de.hglabor.utils"
-version = "1.0"
+ext.localProps = new Properties()
+try {
+    localProps.load(file("local.properties").newReader())
+} catch (Exception ignored) {
+    // scheiß drauf groovy ist kacke
+}
+
 
 allprojects {
     repositories {
@@ -21,37 +21,33 @@ allprojects {
     apply plugin: 'java'
 }
 
+
+group 'de.hglabor'
+version '0.0.2'
+
+
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/HGLabor/Localization"
+            credentials {
+                username = localProps["gpr.user"] ?: System.getenv("USERNAME")
+                password = localProps["gpr.key"] ?: System.getenv("TOKEN")
+            }
+        }
+    }
     publications {
-        MyPublication(MavenPublication) {
-            from components.java
-            groupId 'de.hglabor.utils'
-            artifactId 'Localization'
-            version '1.0'
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
+
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 
-bintray {
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-    publications = ['MyPublication']
-    pkg {
-        repo = 'utils'
-        name = 'Localization'
-        userOrg = "hglabor"
-        licenses = ['Apache-2.0']
-        vcsUrl = "https://github.com/HGLabor/Localization.git"
-        version {
-            name = '1.0'
-            desc = 'Localization API for HGLabor'
-            released = new Date()
-        }
-    }
-}
 
 repositories {
     mavenCentral()
