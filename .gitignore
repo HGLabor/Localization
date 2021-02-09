@@ -116,3 +116,4 @@ run/
 build
 src/main/resources/
 src/test/
+local.properties
