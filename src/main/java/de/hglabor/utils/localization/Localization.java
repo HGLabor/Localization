@@ -5,8 +5,10 @@ import com.google.gson.stream.JsonReader;
 import org.apache.commons.lang3.text.StrSubstitutor;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -23,32 +25,36 @@ public final class Localization {
         this.gson = new Gson();
     }
 
-    public void loadLanguageFiles(Path folder, String colorReplaceValue) throws Exception {
-        this.colorReplaceValue = colorReplaceValue;
-        File[] files = folder.toFile().listFiles();
+    public void loadLanguageFiles(Path folder, String colorReplaceValue)  {
+        try {
+            this.colorReplaceValue = colorReplaceValue;
+            File[] files = folder.toFile().listFiles();
 
-        if (files == null) {
-            throw new Exception("Folder files are null");
-        }
+            if (files == null) {
+                throw new Exception("Folder files are null");
+            }
 
-        for (File languageFile : files) {
-            String name = languageFile.getName();
-            System.out.printf("Parsing file %s\n", name);
+            for (File languageFile : files) {
+                String name = languageFile.getName();
+                System.out.printf("Parsing file %s\n", name);
 
-            if (name.contains("_")) {
-                name = name.substring(name.indexOf("_") + 1, name.lastIndexOf(".json"));
-                JsonReader reader = new JsonReader(new FileReader(languageFile));
-                Map<String, String> json = gson.fromJson(reader, Map.class);
+                if (name.contains("_")) {
+                    name = name.substring(name.indexOf("_") + 1, name.lastIndexOf(".json"));
+                    JsonReader reader = new JsonReader(new FileReader(languageFile));
+                    Map<String, String> json = gson.fromJson(reader, Map.class);
 
-                if (json != null) {
-                    Locale key = Locale.forLanguageTag(name);
-                    if (translations.containsKey(key)) {
-                        translations.get(key).putAll(json);
-                    } else {
-                        translations.put(key, json);
+                    if (json != null) {
+                        Locale key = Locale.forLanguageTag(name);
+                        if (translations.containsKey(key)) {
+                            translations.get(key).putAll(json);
+                        } else {
+                            translations.put(key, json);
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
