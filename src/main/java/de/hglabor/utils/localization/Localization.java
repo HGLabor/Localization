@@ -3,12 +3,11 @@ package de.hglabor.utils.localization;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import org.apache.commons.lang3.text.StrSubstitutor;
+import org.apache.commons.text.StringSubstitutor;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -67,6 +66,6 @@ public final class Localization {
     }
 
     public String getMessage(String key, Map<String, String> values, Locale locale) {
-        return StrSubstitutor.replace(getMessage(key, locale), values).replaceAll("&", colorReplaceValue);
+        return StringSubstitutor.replace(getMessage(key, locale), values).replaceAll("&", colorReplaceValue);
     }
 }

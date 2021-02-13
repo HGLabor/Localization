@@ -22,7 +22,7 @@ allprojects {
 
 
 group 'de.hglabor'
-version '0.0.4'
+version '0.0.5'
 
 
 publishing {
@@ -46,14 +46,11 @@ publishing {
 
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
-
-
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    compileOnly "org.apache.commons:commons-lang3:3.11"
-    compileOnly "com.google.guava:guava:12.0.1"
+    compile "org.apache.commons:commons-text:1.9"
     compileOnly "com.google.code.gson:gson:2.8.6"
 }
