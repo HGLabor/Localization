@@ -3,13 +3,10 @@ plugins {
     id("maven-publish")
 }
 
-ext.localProps = new Properties()
-try {
-    localProps.load(file("local.properties").newReader())
-} catch (Exception ignored) {
-    // scheiß drauf groovy ist kacke
-}
-
+group 'de.hglabor'
+version '0.0.5'
+description "Localization for HGLabor Network"
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_11
 
 allprojects {
     repositories {
@@ -17,34 +14,51 @@ allprojects {
     }
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
+    apply plugin: 'signing'
     apply plugin: 'java'
 }
 
-
-group 'de.hglabor'
-version '0.0.5'
-
-
-publishing {
+uploadArchives {
     repositories {
-        maven {
-            name = "GitHubPackages"
-            url = "https://maven.pkg.github.com/HGLabor/Localization"
-            credentials {
-                username = localProps["gpr.user"] ?: System.getenv("USERNAME")
-                password = localProps["gpr.key"] ?: System.getenv("TOKEN")
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'localization'
+                packaging 'jar'
+                description "Localization for HGLabor Network"
+                url 'https://github.com/HGLabor/Localization/tree/main'
+
+                scm {
+                    connection "scm:git:git://github.com/HGLabor/Localization.git"
+                    developerConnection "scm:git:ssh://github.com:HGLabor/Localization.git"
+                    url "https://github.com/HGLabor/Localization"
+                }
+
+                developers {
+                    developer {
+                        id 'copyandexecute'
+                    }
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
             }
         }
     }
-    publications {
-        gpr(MavenPublication) {
-            from(components.java)
-        }
-    }
 }
-
-
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
@@ -53,4 +67,26 @@ repositories {
 dependencies {
     compile "org.apache.commons:commons-text:1.9"
     compileOnly "com.google.code.gson:gson:2.8.6"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
 }
