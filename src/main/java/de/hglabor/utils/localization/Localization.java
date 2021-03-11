@@ -2,7 +2,6 @@ package de.hglabor.utils.localization;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import org.apache.commons.lang3.text.StrSubstitutor;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.io.File;
