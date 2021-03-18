@@ -23,7 +23,11 @@ public final class Localization {
         this.gson = new Gson();
     }
 
-    public void loadLanguageFiles(Path folder, String colorReplaceValue)  {
+    public static String t(String key, Locale locale) {
+        return Localization.INSTANCE.getMessage(key, locale);
+    }
+
+    public void loadLanguageFiles(Path folder, String colorReplaceValue) {
         try {
             this.colorReplaceValue = colorReplaceValue;
             File[] files = folder.toFile().listFiles();
