@@ -18,6 +18,14 @@ allprojects {
     apply plugin: 'java'
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from(components.java)
+        }
+    }
+}
+
 uploadArchives {
     repositories {
         mavenDeployer {
