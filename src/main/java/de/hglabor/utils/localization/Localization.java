@@ -27,6 +27,10 @@ public final class Localization {
         return Localization.INSTANCE.getMessage(key, locale);
     }
 
+    public static String t(String key, Map<String, String> values, Locale locale) {
+        return Localization.INSTANCE.getMessage(key, values, locale);
+    }
+
     public void loadLanguageFiles(Path folder, String colorReplaceValue) {
         try {
             this.colorReplaceValue = colorReplaceValue;
