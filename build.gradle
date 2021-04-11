@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'de.hglabor'
-version '0.0.6'
+version '0.0.7'
 description "Localization for HGLabor Network"
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_11
 

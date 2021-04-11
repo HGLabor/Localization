@@ -68,7 +68,7 @@ public final class Localization {
         if (translations.containsKey(locale)) {
             return translations.get(locale).getOrDefault(key, key).replaceAll("&", colorReplaceValue);
         } else {
-            return translations.get(Locale.ENGLISH).getOrDefault(key, key).replaceAll("&", colorReplaceValue);
+            return translations.getOrDefault(Locale.ENGLISH,Map.of()).getOrDefault(key, key).replaceAll("&", colorReplaceValue);
         }
     }
 
